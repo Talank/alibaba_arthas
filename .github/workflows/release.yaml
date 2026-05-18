@@ -2,12 +2,10 @@ name: release
 
 on:
   push:
-    tags:
-      - "arthas-all-*"
-
+  workflow_dispatch:
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup java
@@ -36,3 +34,10 @@ jobs:
             tunnel-server/target/*fatjar.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+      fail-fast: false

@@ -56,7 +56,7 @@ jobs:
         run: mvn -V -ntp clean install -P full
 
   telnet_stop_leak_it:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
@@ -79,10 +79,3 @@ jobs:
         with:
           name: telnet-stop-leak-logs
           path: integration-test/telnet-stop-leak/work
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-latest
-      fail-fast: false

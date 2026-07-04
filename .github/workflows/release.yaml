@@ -1,13 +1,10 @@
 name: release
 
 on:
-  push:
-    tags:
-      - "arthas-all-*"
-
+  workflow_dispatch:
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup java
@@ -28,7 +25,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
+        if: always()
         with:
           fail_on_unmatched_files: true
           files: |
@@ -36,3 +33,9 @@ jobs:
             tunnel-server/target/*fatjar.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+      fail-fast: false
